@@ -1,5 +1,6 @@
 //Workout Model imported
 const gradeModel = require('./todo.model')
+const userModel = require('../auth/userModel')
 const mongoose = require('mongoose')
 
 // get all 
@@ -16,16 +17,32 @@ const getSingle = async (req, res) => {
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'No Such Volunteer Job' })
+        return res.status(404).json({ error: 'No Such to do' })
     }
     const gradeModels = await gradeModel.findById(id)
 
     if (!gradeModels) {
-        return res.status(404).json({ error: 'No Such Volunteer Job' })
+        return res.status(404).json({ error: 'No Such to do' })
 
     }
     res.status(200).json(gradeModels)
 }
+
+// get a single  user
+const getUserSingle = async (req, res) => {
+    const { id } = req.params
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: 'No Such to do' })
+    }
+    const gradeModels = await userModel.find({userID:id})
+
+    if (!gradeModels) {
+        return res.status(404).json({ error: 'No Such to do' })
+
+    }
+    res.status(200).json(gradeModels)
+}
+
 
 // create a new gradeModel
 const createWithoutReqBodyCheck = async (req, res) => {
@@ -39,7 +56,7 @@ const createWithoutReqBodyCheck = async (req, res) => {
 }
 
 const createNew = async (req, res) => {
-    const { name,description } = req.body;
+    const { name,description,userID } = req.body;
 
     try {
         // Check if a document with the same name already exists
@@ -50,7 +67,7 @@ const createNew = async (req, res) => {
         // }
 
         // Create a new document
-        const gradeModels = await gradeModel.create({ name ,description});
+        const gradeModels = await gradeModel.create({ name ,description,userID});
         res.status(200).json(gradeModels);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -62,12 +79,12 @@ const deleteSinle = async (req, res) => {
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'No Such Volunteer Job' })
+        return res.status(404).json({ error: 'No Such to do' })
     }
     const gradeModels = await gradeModel.findOneAndDelete({ _id: id })
 
     if (!gradeModels) {
-        return res.status(400).json({ error: 'No Such Volunteer Job' })
+        return res.status(400).json({ error: 'No Such to do' })
     }
 
     res.status(200).json(gradeModels)
@@ -100,6 +117,7 @@ module.exports = {
     getAll,
     createNew,
     deleteSinle,
-    updateDocument,createWithoutReqBodyCheck
+    updateDocument,createWithoutReqBodyCheck,
+    getUserSingle
 }
 

@@ -6,8 +6,10 @@ const {
     createNew,
     deleteSinle,
     updateDocument,
-    createWithoutReqBodyCheck
+    createWithoutReqBodyCheck,
+    getUserSingle
 } = require('./todo.controller')
+const { protect } = require('../middleware/authMiddleware')
 
 
 
@@ -16,6 +18,9 @@ router.get('/',getAll)
 
 //Get a single document
 router.get('/:id',getSingle)
+
+//Get a single getUserSingle document
+router.get('/byuser/:id',getUserSingle)
 
 //POST a new document
 router.post('/', createNew)
