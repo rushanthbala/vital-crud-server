@@ -34,7 +34,7 @@ const getUserSingle = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: 'No Such to do' })
     }
-    const gradeModels = await userModel.find({userID:id})
+    const gradeModels = await gradeModel.find({userID:id})
 
     if (!gradeModels) {
         return res.status(404).json({ error: 'No Such to do' })
